@@ -34,6 +34,7 @@
 #include "proc_ops_version.h"
 
 #include "scull.h"		/* local definitions */
+#include "kernel_compat.h"
 
 struct scull_pipe {
         wait_queue_head_t inq, outq;       /* read and write queues */
@@ -311,7 +312,7 @@ static struct file_operations scullpipe_proc_ops = {
  */
 struct file_operations scull_pipe_fops = {
 	.owner =	THIS_MODULE,
-	.llseek =	no_llseek,
+	.llseek =	scull_no_llseek,
 	.read =		scull_p_read,
 	.write =	scull_p_write,
 	.poll =		scull_p_poll,

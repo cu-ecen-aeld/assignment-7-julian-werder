@@ -30,6 +30,7 @@
 #include <linux/interrupt.h> /* tasklets */
 
 #include "proc_ops_version.h"
+#include "kernel_compat.h"
 MODULE_LICENSE("Dual BSD/GPL");
 
 /*
@@ -229,7 +230,7 @@ static const struct file_operations jiq_read_tasklet_fops = {
 
 static void jiq_timedout(struct timer_list *t)
 {
-	struct clientdata *data = from_timer(data, t, jiq_timer);
+	struct clientdata *data = timer_container_of(data, t, jiq_timer);
 	jiq_print(data);            /* print a line */
 	wake_up_interruptible(&jiq_wait);  /* awake the process */
 }
@@ -246,7 +247,7 @@ static int jiq_read_run_timer_show(struct seq_file *m, void *v)
 	jiq_print(&jiq_data);   /* print and go to sleep */
 	add_timer(&jiq_data.jiq_timer);
 	wait_event_interruptible(jiq_wait, 0); /* RACE */
-	del_timer_sync(&jiq_data.jiq_timer);  /* in case a signal woke us up */
+	timer_delete_sync(&jiq_data.jiq_timer);  /* in case a signal woke us up */
 
 	return 0;
 }

@@ -5,8 +5,7 @@
 # This conditional selects whether we are being included from the
 # kernel Makefile or not.
 
-LDDINC=$(PWD)/../include
-EXTRA_CFLAGS += -I$(LDDINC)
+ccflags-y += -I$(src)/../include
 
 ifeq ($(KERNELRELEASE),)
 

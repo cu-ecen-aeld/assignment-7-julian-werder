@@ -34,6 +34,7 @@
 #include <asm/hardirq.h>
 
 #include "proc_ops_version.h"
+#include "kernel_compat.h"
 /*
  * This module is a silly one: it only embeds short code fragments
  * that show how time delays can be handled in the kernel.
@@ -182,7 +183,7 @@ struct jit_data {
 
 void jit_timer_fn(struct timer_list *t)
 {
-	struct jit_data *data = from_timer(data, t, timer);
+	struct jit_data *data = timer_container_of(data, t, timer);
 	unsigned long j = jiffies;
 	seq_printf(data->m, "%9li  %3li     %i    %6i   %i   %s\n",
 			     j, j - data->prevjiffies, in_interrupt() ? 1 : 0,

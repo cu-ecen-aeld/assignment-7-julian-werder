@@ -9,10 +9,9 @@ else
   DEBFLAGS = -O2
 endif
 
-LDDINC=$(PWD)/../include
 
-EXTRA_CFLAGS += $(DEBFLAGS)
-EXTRA_CFLAGS += -I$(LDDINC)
+ccflags-y += $(DEBFLAGS)
+ccflags-y += -I$(src)/../include
 
 ifneq ($(KERNELRELEASE),)
 # call from kernel build system
@@ -37,7 +36,7 @@ clean:
 	rm -rf *.o *~ core .depend .*.cmd *.ko *.mod.c .tmp_versions *.mod modules.order *.symvers
 
 depend .depend dep:
-	$(CC) $(EXTRA_CFLAGS) -M *.c > .depend
+	$(CC) $(ccflags-y) -M *.c > .depend
 
 
 ifeq (.depend,$(wildcard .depend))
